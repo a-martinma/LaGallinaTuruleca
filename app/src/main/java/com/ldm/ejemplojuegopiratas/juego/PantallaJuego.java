@@ -151,11 +151,11 @@ public class PantallaJuego extends Pantalla {
 
         Pixmap stainPixmap = null;
         if(botin.tipo== Botin.TIPO_1)
-            stainPixmap = Assets.botin1;
+            stainPixmap = Assets.alimento1;
         if(botin.tipo == Botin.TIPO_2)
-            stainPixmap = Assets.botin2;
+            stainPixmap = Assets.alimento2;
         if(botin.tipo == Botin.TIPO_3)
-            stainPixmap = Assets.botin3;
+            stainPixmap = Assets.alimento3;
         int x = botin.x * 32;
         int y = botin.y * 32;
         g.drawPixmap(stainPixmap, x, y);
@@ -165,18 +165,18 @@ public class PantallaJuego extends Pantalla {
             Tripulacion part = jollyroger.partes.get(i);
             x = part.x * 32;
             y = part.y * 32;
-            g.drawPixmap(Assets.tripulacion, x, y);
+            g.drawPixmap(Assets.pollito, x, y);
         }
 
         Pixmap headPixmap = null;
         if(jollyroger.direccion == JollyRoger.ARRIBA)
-            headPixmap = Assets.barcoarriba;
+            headPixmap = Assets.gallinaarriba;
         if(jollyroger.direccion == JollyRoger.IZQUIERDA)
-            headPixmap = Assets.barcoizquierda;
+            headPixmap = Assets.gallinaizquierda;
         if(jollyroger.direccion == JollyRoger.ABAJO)
-            headPixmap = Assets.barcoabajo;
+            headPixmap = Assets.gallinaabajo;
         if(jollyroger.direccion == JollyRoger.DERECHA)
-            headPixmap = Assets.barcoderecha;
+            headPixmap = Assets.gallinaderecha;
         x = head.x * 32 + 16;
         y = head.y * 32 + 16;
         g.drawPixmap(headPixmap, x - headPixmap.getWidth() / 2, y - headPixmap.getHeight() / 2);
