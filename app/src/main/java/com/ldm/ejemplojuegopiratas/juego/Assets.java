@@ -12,6 +12,8 @@ public class Assets {
     public static Pixmap ayuda2;
     public static Pixmap ayuda3;
     public static Pixmap numeros;
+    public static Pixmap letras;
+    public static Pixmap muro;
     public static Pixmap preparado;
     public static Pixmap menupausa;
     public static Pixmap finjuego;

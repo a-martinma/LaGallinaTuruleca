@@ -74,6 +74,10 @@ public class JollyRoger {
             if(parte.x == barco.x && parte.y == barco.y)
                 return true;
         }
+
+        if ((barco.x == 3 && barco.y == 3) || (barco.x == 6 && barco.y == 9))
+            return true;
+
         return false;
     }
 }

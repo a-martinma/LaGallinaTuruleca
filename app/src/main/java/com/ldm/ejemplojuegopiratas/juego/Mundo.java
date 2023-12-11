@@ -22,6 +22,16 @@ public class Mundo {
     public Mundo() {
         jollyroger = new JollyRoger();
         colocarBotin();
+        colocarMuros();
+    }
+
+    private void colocarMuros() {
+        int x1 = 3;
+        int y1 = 3;
+        int x2 = 6;
+        int y2 = 9;
+        campos[x1][y1] = true;
+        campos[x2][y2] = true;
     }
 
     private void colocarBotin() {
@@ -30,6 +40,9 @@ public class Mundo {
                 campos[x][y] = false;
             }
         }
+
+        campos[3][3] = true;
+        campos[6][9] = true;
 
         int len = jollyroger.partes.size();
         for (int i = 0; i < len; i++) {

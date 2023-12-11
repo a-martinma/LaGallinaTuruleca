@@ -160,6 +160,9 @@ public class PantallaJuego extends Pantalla {
         int y = botin.y * 32;
         g.drawPixmap(stainPixmap, x, y);
 
+        g.drawPixmap(Assets.muro, 3 * 32, 3 * 32);
+        g.drawPixmap(Assets.muro, 6 * 32, 9 * 32);
+
         int len = jollyroger.partes.size();
         for(int i = 1; i < len; i++) {
             Tripulacion part = jollyroger.partes.get(i);

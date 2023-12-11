@@ -10,7 +10,8 @@ import com.ldm.ejemplojuegopiratas.FileIO;
 
 public class Configuraciones {
     public static boolean sonidoHabilitado = true;
-    public static int[] maxPuntuaciones = new int[] { 100, 80, 50, 30, 10 };
+    public static int[] maxPuntuaciones = new int[] { 100, 80, 50, 67, 90 };
+    public static double[] tiempos = new double[] {30.97, 15.72, 13.45, 20.29, 55.74};
 
     public static void cargar(FileIO files) {
         BufferedReader in = null;

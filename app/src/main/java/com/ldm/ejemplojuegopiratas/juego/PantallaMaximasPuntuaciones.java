@@ -13,7 +13,7 @@ public class PantallaMaximasPuntuaciones extends Pantalla {
         super(juego);
 
         for (int i = 0; i < 5; i++) {
-            lineas[i] = "" + (i + 1) + ". " + Configuraciones.maxPuntuaciones[i];
+            lineas[i] = "" + (i + 1) + ". " + Configuraciones.maxPuntuaciones[i] + " - " + Configuraciones.tiempos[i] + "s";
         }
     }
 
@@ -67,13 +67,24 @@ public class PantallaMaximasPuntuaciones extends Pantalla {
             if (character == '.') {
                 srcX = 200;
                 srcWidth = 10;
-            } else {
+                g.drawPixmap(Assets.numeros, x, y, srcX, 0, srcWidth, 32);
+                x += srcWidth;
+            } else if (character == '-') {
+                srcX = 20;
+                srcWidth = 20;
+                g.drawPixmap(Assets.letras, x, y, srcX, 0, srcWidth, 32);
+                x += srcWidth;
+            } else if (character == 's') {
+                srcX = 0;
+                srcWidth = 20;
+                g.drawPixmap(Assets.letras, x, y, srcX, 0, srcWidth, 32);
+                x += srcWidth;
+            }else {
                 srcX = (character - '0') * 20;
                 srcWidth = 20;
+                g.drawPixmap(Assets.numeros, x, y, srcX, 0, srcWidth, 32);
+                x += srcWidth;
             }
-
-            g.drawPixmap(Assets.numeros, x, y, srcX, 0, srcWidth, 32);
-            x += srcWidth;
         }
     }
 
