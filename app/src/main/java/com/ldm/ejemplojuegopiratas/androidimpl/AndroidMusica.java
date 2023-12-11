@@ -12,6 +12,9 @@ public class AndroidMusica implements Musica, OnCompletionListener {
     MediaPlayer mediaPlayer;
     boolean isPrepared = false;
 
+
+    private boolean estadoPausa = false;
+
     public AndroidMusica(AssetFileDescriptor assetDescriptor) {
         mediaPlayer = new MediaPlayer();
         try {
@@ -21,6 +24,8 @@ public class AndroidMusica implements Musica, OnCompletionListener {
             mediaPlayer.prepare();
             isPrepared = true;
             mediaPlayer.setOnCompletionListener(this);
+
+
         } catch (Exception e) {
             throw new RuntimeException("No se ha podido cargar la música");
         }
@@ -50,15 +55,20 @@ public class AndroidMusica implements Musica, OnCompletionListener {
 
     @Override
     public void pause() {
-        if (mediaPlayer.isPlaying())
+        if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
+            this.estadoPausa = true;
+
+        }
     }
 
     @Override
     public void play() {
+
+
+        this.estadoPausa = false;
         if (mediaPlayer.isPlaying())
             return;
-
         try {
             synchronized (this) {
                 if (!isPrepared)
@@ -96,4 +106,6 @@ public class AndroidMusica implements Musica, OnCompletionListener {
             isPrepared = false;
         }
     }
+
+
 }

@@ -37,6 +37,8 @@ public class LoadingScreen extends Pantalla{
         Assets.pulsar = juego.getAudio().nuevoSonido("pulsar.ogg");
         Assets.ataque = juego.getAudio().nuevoSonido("ataque.ogg");
         Assets.derrota = juego.getAudio().nuevoSonido("derrota.ogg");
+        Assets.musicaGameplay = juego.getAudio().nuevaMusica("MusicaGameplay.ogg");
+        Assets.musicaMenu = juego.getAudio().nuevaMusica("MusicaMenu.ogg");
 
 
         Configuraciones.cargar(juego.getFileIO());

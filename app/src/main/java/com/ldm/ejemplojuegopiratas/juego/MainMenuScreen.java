@@ -4,6 +4,7 @@ import com.ldm.ejemplojuegopiratas.Juego;
 import com.ldm.ejemplojuegopiratas.Graficos;
 import com.ldm.ejemplojuegopiratas.Input.TouchEvent;
 import com.ldm.ejemplojuegopiratas.Pantalla;
+import com.ldm.ejemplojuegopiratas.androidimpl.AndroidMusica;
 
 public class MainMenuScreen extends Pantalla {
     public MainMenuScreen(Juego juego) {
@@ -12,6 +13,10 @@ public class MainMenuScreen extends Pantalla {
 
     @Override
     public void update(float deltaTime) {
+        if(Configuraciones.sonidoHabilitado) {
+            if(!Assets.musicaMenu.isPlaying())
+                Assets.musicaMenu.play();
+        }
         Graficos g = juego.getGraphics();
         List<TouchEvent> touchEvents = juego.getInput().getTouchEvents();
         juego.getInput().getKeyEvents();
@@ -22,6 +27,14 @@ public class MainMenuScreen extends Pantalla {
             if(event.type == TouchEvent.TOUCH_UP) {
                 if(inBounds(event, 0, g.getHeight() - 64, 64, 64)) {
                     Configuraciones.sonidoHabilitado = !Configuraciones.sonidoHabilitado;
+
+                    if(Assets.musicaMenu.isPlaying())
+                        Assets.musicaMenu.stop();
+
+                    else
+                        Assets.musicaMenu.play();
+
+
                     if(Configuraciones.sonidoHabilitado)
                         Assets.pulsar.play(1);
                 }

@@ -14,6 +14,8 @@ public class Mundo {
     public boolean finalJuego = false;
     public int puntuacion = 0;
 
+
+
     boolean campos[][] = new boolean[MUNDO_ANCHO][MUNDO_ALTO];
     Random random = new Random();
     float tiempoTick = 0;
