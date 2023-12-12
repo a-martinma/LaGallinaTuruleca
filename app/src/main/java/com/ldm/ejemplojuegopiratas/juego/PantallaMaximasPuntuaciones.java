@@ -13,7 +13,8 @@ public class PantallaMaximasPuntuaciones extends Pantalla {
         super(juego);
 
         for (int i = 0; i < 5; i++) {
-            lineas[i] = "" + (i + 1) + ". " + Configuraciones.maxPuntuaciones[i] + " - " + Configuraciones.tiempos[i] + "s";
+            String tiempoFormateado = String.format("%.2f", Configuraciones.tiempos[i]);
+            lineas[i] = "" + (i + 1) + ". " + Configuraciones.maxPuntuaciones[i] + " - " + tiempoFormateado + "s";
         }
     }
 

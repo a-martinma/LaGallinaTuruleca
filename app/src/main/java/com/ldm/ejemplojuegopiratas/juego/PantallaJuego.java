@@ -23,8 +23,8 @@ public class PantallaJuego extends Pantalla {
     int antiguaPuntuacion = 0;
     String puntuacion = "0";
 
-    float tiempoInicio;
-    float tiempoFinal;
+    long tiempoInicio;
+    long tiempoFinal;
     float tiempoTotal;
 
     public PantallaJuego(Juego juego) {
@@ -49,8 +49,10 @@ public class PantallaJuego extends Pantalla {
     }
 
     private void updateReady(List<TouchEvent> touchEvents) {
-        if(touchEvents.size() > 0)
+        if(touchEvents.size() > 0) {
+            this.tiempoInicio = System.currentTimeMillis();
             estado = EstadoJuego.Ejecutandose;
+        }
     }
 
     private void updateRunning(List<TouchEvent> touchEvents, float deltaTime) {
@@ -58,7 +60,7 @@ public class PantallaJuego extends Pantalla {
             Assets.musicaMenu.stop();
             Assets.musicaGameplay.play();
         }
-        tiempoInicio = System.currentTimeMillis();
+
         int len = touchEvents.size();
         for(int i = 0; i < len; i++) {
             TouchEvent event = touchEvents.get(i);
@@ -82,8 +84,9 @@ public class PantallaJuego extends Pantalla {
 
         mundo.update(deltaTime);
         if(mundo.finalJuego) {
-            tiempoFinal = System.currentTimeMillis();
-            tiempoTotal = tiempoFinal - tiempoInicio;
+            this.tiempoFinal = System.currentTimeMillis();
+            this.tiempoTotal = (this.tiempoFinal - this.tiempoInicio) / 1000f;
+
             if(Configuraciones.sonidoHabilitado)
                 Assets.derrota.play(1);
             estado = EstadoJuego.FinJuego;
@@ -111,6 +114,7 @@ public class PantallaJuego extends Pantalla {
                     if(event.y > 148 && event.y < 196) {
                         if(Configuraciones.sonidoHabilitado)
                             Assets.pulsar.play(1);
+                        Assets.musicaGameplay.stop();
                         juego.setScreen(new MainMenuScreen(juego));
                         return;
                     }
@@ -158,9 +162,7 @@ public class PantallaJuego extends Pantalla {
 
 
         drawText(g, puntuacion, g.getWidth() / 2 - puntuacion.length()*20 / 2, g.getHeight() - 42);
-        if (estado == EstadoJuego.FinJuego) {
-            drawTime(g, "Tiempo: " + (int) tiempoTotal + "s", g.getWidth() / 2 - 100, g.getHeight() / 2);
-        }
+
     }
 
     private void drawWorld(Mundo mundo) {
@@ -262,30 +264,6 @@ public class PantallaJuego extends Pantalla {
         }
     }
 
-    private void drawTime(Graficos g, String line, int x, int y) {
-        int len = line.length();
-        for (int i = 0; i < len; i++) {
-            char character = line.charAt(i);
-
-            if (character == ' ') {
-                x += 20;
-                continue;
-            }
-
-            int srcX = 0;
-            int srcWidth = 0;
-            if (character == '.') {
-                srcX = 200;
-                srcWidth = 10;
-            } else {
-                srcX = (character - '0') * 20;
-                srcWidth = 20;
-            }
-
-            g.drawPixmap(Assets.numeros, x, y, srcX, 0, srcWidth, 32);
-            x += srcWidth;
-        }
-    }
 
     @Override
     public void pause() {
@@ -293,7 +271,8 @@ public class PantallaJuego extends Pantalla {
             estado = EstadoJuego.Pausado;
 
         if(mundo.finalJuego) {
-            Configuraciones.addScore(mundo.puntuacion);
+            Configuraciones.addScore(mundo.puntuacion, this.tiempoTotal);
+
             Configuraciones.save(juego.getFileIO());
         }
     }

@@ -4,7 +4,6 @@ import com.ldm.ejemplojuegopiratas.Juego;
 import com.ldm.ejemplojuegopiratas.Graficos;
 import com.ldm.ejemplojuegopiratas.Input.TouchEvent;
 import com.ldm.ejemplojuegopiratas.Pantalla;
-import com.ldm.ejemplojuegopiratas.androidimpl.AndroidMusica;
 
 public class MainMenuScreen extends Pantalla {
     public MainMenuScreen(Juego juego) {
