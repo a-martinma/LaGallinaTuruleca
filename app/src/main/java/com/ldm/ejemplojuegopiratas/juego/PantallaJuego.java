@@ -1,14 +1,15 @@
 package com.ldm.ejemplojuegopiratas.juego;
 
+import java.util.LinkedList;
 import java.util.List;
 import android.graphics.Color;
+import android.util.Pair;
+
 import com.ldm.ejemplojuegopiratas.Juego;
 import com.ldm.ejemplojuegopiratas.Graficos;
 import com.ldm.ejemplojuegopiratas.Input.TouchEvent;
-import com.ldm.ejemplojuegopiratas.Musica;
 import com.ldm.ejemplojuegopiratas.Pixmap;
 import com.ldm.ejemplojuegopiratas.Pantalla;
-import com.ldm.ejemplojuegopiratas.androidimpl.AndroidMusica;
 
 public class PantallaJuego extends Pantalla {
     enum EstadoJuego {
@@ -26,10 +27,19 @@ public class PantallaJuego extends Pantalla {
     long tiempoInicio;
     long tiempoFinal;
     float tiempoTotal;
+    TimerAnimation timerAnimation;
+    LinkedList<Float> listaPausas = new LinkedList<>();
+    long tiempoInicioPausa;
+    long tiempoFinalPausa;
+    float tiempoTotalPausa;
+    float tiempoReal;
+    boolean vieneDePausa = false;
+
 
     public PantallaJuego(Juego juego) {
         super(juego);
         mundo = new Mundo();
+        this.timerAnimation = new TimerAnimation(juego.getGraphics().getWidth() / 2, juego.getGraphics().getWidth());
     }
 
     @Override
@@ -39,8 +49,9 @@ public class PantallaJuego extends Pantalla {
 
         if(estado == EstadoJuego.Preparado)
             updateReady(touchEvents);
-        if(estado == EstadoJuego.Ejecutandose)
+        if(estado == EstadoJuego.Ejecutandose) {
             updateRunning(touchEvents, deltaTime);
+        }
         if(estado == EstadoJuego.Pausado)
             updatePaused(touchEvents);
         if(estado == EstadoJuego.FinJuego)
@@ -59,6 +70,7 @@ public class PantallaJuego extends Pantalla {
         if(Configuraciones.sonidoHabilitado) {
             Assets.musicaMenu.stop();
             Assets.musicaGameplay.play();
+            Assets.musicaGameplay.setLooping(true);
         }
 
         int len = touchEvents.size();
@@ -68,16 +80,17 @@ public class PantallaJuego extends Pantalla {
                 if(event.x < 64 && event.y < 64) {
                     if(Configuraciones.sonidoHabilitado)
                         Assets.pulsar.play(1);
+                    this.tiempoInicioPausa = System.currentTimeMillis();
                     estado = EstadoJuego.Pausado;
                     return;
                 }
             }
             if(event.type == TouchEvent.TOUCH_DOWN) {
                 if(event.x < 64 && event.y > 416) {
-                    mundo.jollyroger.girarIzquierda();
+                    mundo.gallina.girarIzquierda();
                 }
                 if(event.x > 256 && event.y > 416) {
-                    mundo.jollyroger.girarDerecha();
+                    mundo.gallina.girarDerecha();
                 }
             }
         }
@@ -95,7 +108,7 @@ public class PantallaJuego extends Pantalla {
             antiguaPuntuacion = mundo.puntuacion;
             puntuacion = "" + antiguaPuntuacion;
             if(Configuraciones.sonidoHabilitado)
-                Assets.ataque.play(1);
+                Assets.comer.play(1);
         }
     }
 
@@ -108,7 +121,12 @@ public class PantallaJuego extends Pantalla {
                     if(event.y > 100 && event.y <= 148) {
                         if(Configuraciones.sonidoHabilitado)
                             Assets.pulsar.play(1);
+                        this.tiempoFinalPausa = System.currentTimeMillis();
+                        this.tiempoTotalPausa = this.tiempoFinalPausa - this.tiempoInicioPausa;
+                        listaPausas.add(this.tiempoTotalPausa);
+                        this.vieneDePausa = true;
                         estado = EstadoJuego.Ejecutandose;
+
                         return;
                     }
                     if(event.y > 148 && event.y < 196) {
@@ -127,7 +145,7 @@ public class PantallaJuego extends Pantalla {
         if(Configuraciones.sonidoHabilitado) {
             Assets.musicaGameplay.stop();
             Assets.musicaMenu.play();
-
+            Assets.musicaMenu.setLooping(true);
         }
         int len = touchEvents.size();
         for(int i = 0; i < len; i++) {
@@ -144,7 +162,6 @@ public class PantallaJuego extends Pantalla {
         }
     }
 
-
     @Override
     public void present(float deltaTime) {
         Graficos g = juego.getGraphics();
@@ -153,55 +170,60 @@ public class PantallaJuego extends Pantalla {
         drawWorld(mundo);
         if(estado == EstadoJuego.Preparado)
             drawReadyUI();
-        if(estado == EstadoJuego.Ejecutandose)
+        if(estado == EstadoJuego.Ejecutandose){
             drawRunningUI();
+            if(!this.vieneDePausa) {
+                timerAnimation.drawText(g, (System.currentTimeMillis() - tiempoInicio), 50);
+            }else {
+                float tiempoPausas = 0;
+                for(Float pausa : listaPausas)
+                    tiempoPausas +=pausa;
+                long act = (System.currentTimeMillis() - tiempoInicio - (long) tiempoPausas);
+                timerAnimation.drawText(g, act, 50);
+            }
+        }
         if(estado == EstadoJuego.Pausado)
             drawPausedUI();
         if(estado == EstadoJuego.FinJuego)
             drawGameOverUI();
-
-
-        drawText(g, puntuacion, g.getWidth() / 2 - puntuacion.length()*20 / 2, g.getHeight() - 42);
-
     }
 
     private void drawWorld(Mundo mundo) {
         Graficos g = juego.getGraphics();
-        JollyRoger jollyroger = mundo.jollyroger;
-        Tripulacion head = jollyroger.partes.get(0);
-        Botin botin = mundo.botin;
-
+        Gallina gallina = mundo.gallina;
+        Pollitos head = gallina.partes.get(0);
+        Comida comida = mundo.comida;
 
         Pixmap stainPixmap = null;
-        if(botin.tipo== Botin.TIPO_1)
+        if(comida.tipo== Comida.TIPO_1)
             stainPixmap = Assets.alimento1;
-        if(botin.tipo == Botin.TIPO_2)
+        if(comida.tipo == Comida.TIPO_2)
             stainPixmap = Assets.alimento2;
-        if(botin.tipo == Botin.TIPO_3)
+        if(comida.tipo == Comida.TIPO_3)
             stainPixmap = Assets.alimento3;
-        int x = botin.x * 32;
-        int y = botin.y * 32;
+        int x = comida.x * 32;
+        int y = comida.y * 32;
         g.drawPixmap(stainPixmap, x, y);
 
         g.drawPixmap(Assets.muro, 3 * 32, 3 * 32);
         g.drawPixmap(Assets.muro, 6 * 32, 9 * 32);
 
-        int len = jollyroger.partes.size();
+        int len = gallina.partes.size();
         for(int i = 1; i < len; i++) {
-            Tripulacion part = jollyroger.partes.get(i);
+            Pollitos part = gallina.partes.get(i);
             x = part.x * 32;
             y = part.y * 32;
             g.drawPixmap(Assets.pollito, x, y);
         }
 
         Pixmap headPixmap = null;
-        if(jollyroger.direccion == JollyRoger.ARRIBA)
+        if(gallina.direccion == Gallina.ARRIBA)
             headPixmap = Assets.gallinaarriba;
-        if(jollyroger.direccion == JollyRoger.IZQUIERDA)
+        if(gallina.direccion == Gallina.IZQUIERDA)
             headPixmap = Assets.gallinaizquierda;
-        if(jollyroger.direccion == JollyRoger.ABAJO)
+        if(gallina.direccion == Gallina.ABAJO)
             headPixmap = Assets.gallinaabajo;
-        if(jollyroger.direccion == JollyRoger.DERECHA)
+        if(gallina.direccion == Gallina.DERECHA)
             headPixmap = Assets.gallinaderecha;
         x = head.x * 32 + 16;
         y = head.y * 32 + 16;
@@ -222,6 +244,8 @@ public class PantallaJuego extends Pantalla {
         g.drawLine(0, 416, 480, 416, Color.BLACK);
         g.drawPixmap(Assets.botones, 0, 416, 64, 64, 64, 64);
         g.drawPixmap(Assets.botones, 256, 416, 0, 64, 64, 64);
+        g.drawPixmap(Assets.puntostiempogameplay, 0, 425);
+        drawText(g, puntuacion, g.getWidth() / 2 - puntuacion.length()*20 / 2, g.getHeight() - 42);
     }
 
     private void drawPausedUI() {
@@ -237,6 +261,22 @@ public class PantallaJuego extends Pantalla {
         g.drawPixmap(Assets.finjuego, 62, 100);
         g.drawPixmap(Assets.botones, 128, 200, 0, 128, 64, 64);
         g.drawLine(0, 416, 480, 416, Color.BLACK);
+        drawText(g, puntuacion, 265, 420);
+        this.tiempoReal = this.tiempoTotal;
+        for(Float pausa : listaPausas)
+            tiempoReal = tiempoReal - pausa/1000;
+        String tiempoFormateado = String.format("%.2f", tiempoReal);
+        if(tiempoReal < 10.0f) {
+            drawText(g, tiempoFormateado, 236, 447);
+            g.drawPixmap(Assets.resumen1, 0, 420);
+        }
+        else if (tiempoReal > 10.0f && tiempoReal < 100.0f){
+            drawText(g, tiempoFormateado, 242, 447);
+            g.drawPixmap(Assets.resumen2, 0, 420);
+        }else{
+            drawText(g, tiempoFormateado, 242, 447);
+            g.drawPixmap(Assets.resumen3, 0, 420);
+        }
     }
 
     public void drawText(Graficos g, String line, int x, int y) {
@@ -259,7 +299,7 @@ public class PantallaJuego extends Pantalla {
                 srcWidth = 20;
             }
 
-            g.drawPixmap(Assets.numeros, x, y, srcX, 0, srcWidth, 32);
+            g.drawPixmap(Assets.numeros, x - 78, y, srcX, 0, srcWidth, 32);
             x += srcWidth;
         }
     }
@@ -270,8 +310,13 @@ public class PantallaJuego extends Pantalla {
         if(estado == EstadoJuego.Ejecutandose)
             estado = EstadoJuego.Pausado;
 
+        this.tiempoReal = this.tiempoTotal;
+
+        for(Float pausa : listaPausas)
+            tiempoReal = tiempoReal - pausa/1000;
+
         if(mundo.finalJuego) {
-            Configuraciones.addScore(mundo.puntuacion, this.tiempoTotal);
+            Configuraciones.addScore(mundo.puntuacion, tiempoReal);
 
             Configuraciones.save(juego.getFileIO());
         }

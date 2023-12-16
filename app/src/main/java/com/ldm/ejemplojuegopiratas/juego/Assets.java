@@ -12,11 +12,14 @@ public class Assets {
     public static Pixmap ayuda1;
     public static Pixmap ayuda2;
     public static Pixmap ayuda3;
+    public static Pixmap ayuda4;
     public static Pixmap numeros;
     public static Pixmap letras;
     public static Pixmap muro;
     public static Pixmap preparado;
     public static Pixmap menupausa;
+    public static Pixmap ranking;
+    public static Pixmap columnas;
     public static Pixmap finjuego;
     public static Pixmap gallinaarriba;
     public static Pixmap gallinaizquierda;
@@ -26,12 +29,13 @@ public class Assets {
     public static Pixmap alimento1;
     public static Pixmap alimento2;
     public static Pixmap alimento3;
-
+    public static Pixmap puntostiempogameplay;
+    public static Pixmap resumen1;
+    public static Pixmap resumen2;
+    public static Pixmap resumen3;
     public static Sonido pulsar;
-    public static Sonido ataque;
+    public static Sonido comer;
     public static Sonido derrota;
-
     public static Musica musicaGameplay;
-
     public static Musica musicaMenu;
 }

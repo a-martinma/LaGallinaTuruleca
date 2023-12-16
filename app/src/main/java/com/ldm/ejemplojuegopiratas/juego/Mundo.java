@@ -9,21 +9,18 @@ public class Mundo {
     static final float TICK_INICIAL = 0.5f;
     static final float TICK_DECREMENTO = 0.05f;
 
-    public JollyRoger jollyroger;
-    public Botin botin;
+    public Gallina gallina;
+    public Comida comida;
     public boolean finalJuego = false;
     public int puntuacion = 0;
-
-
-
     boolean campos[][] = new boolean[MUNDO_ANCHO][MUNDO_ALTO];
     Random random = new Random();
     float tiempoTick = 0;
     static float tick = TICK_INICIAL;
 
     public Mundo() {
-        jollyroger = new JollyRoger();
-        colocarBotin();
+        gallina = new Gallina();
+        colocarComida();
         colocarMuros();
     }
 
@@ -36,7 +33,7 @@ public class Mundo {
         campos[x2][y2] = true;
     }
 
-    private void colocarBotin() {
+    private void colocarComida() {
         for (int x = 0; x < MUNDO_ANCHO; x++) {
             for (int y = 0; y < MUNDO_ALTO; y++) {
                 campos[x][y] = false;
@@ -46,53 +43,52 @@ public class Mundo {
         campos[3][3] = true;
         campos[6][9] = true;
 
-        int len = jollyroger.partes.size();
+        int len = gallina.partes.size();
         for (int i = 0; i < len; i++) {
-            Tripulacion parte = jollyroger.partes.get(i);
+            Pollitos parte = gallina.partes.get(i);
             campos[parte.x][parte.y] = true;
         }
 
-        int botinX = random.nextInt(MUNDO_ANCHO);
-        int botinY = random.nextInt(MUNDO_ALTO);
+        int comidaX = random.nextInt(MUNDO_ANCHO);
+        int comidaY = random.nextInt(MUNDO_ALTO);
         while (true) {
-            if (campos[botinX][botinY] == false)
+            if (campos[comidaX][comidaY] == false)
                 break;
-            botinX += 1;
-            if (botinX >= MUNDO_ANCHO) {
-                botinX = 0;
-                botinY += 1;
-                if (botinY >= MUNDO_ALTO) {
-                    botinY = 0;
+            comidaX += 1;
+            if (comidaX >= MUNDO_ANCHO) {
+                comidaX = 0;
+                comidaY += 1;
+                if (comidaY >= MUNDO_ALTO) {
+                    comidaY = 0;
                 }
             }
         }
-        botin = new Botin(botinX, botinY, random.nextInt(3));
+        comida = new Comida(comidaX, comidaY, random.nextInt(3));
     }
 
     public void update(float deltaTime) {
         if (finalJuego)
-
             return;
 
         tiempoTick += deltaTime;
 
         while (tiempoTick > tick) {
             tiempoTick -= tick;
-            jollyroger.avance();
-            if (jollyroger.comprobarChoque()) {
+            gallina.avance();
+            if (gallina.comprobarChoque()) {
                 finalJuego = true;
                 return;
             }
 
-            Tripulacion head = jollyroger.partes.get(0);
-            if (head.x == botin.x && head.y == botin.y) {
+            Pollitos head = gallina.partes.get(0);
+            if (head.x == comida.x && head.y == comida.y) {
                 puntuacion += INCREMENTO_PUNTUACION;
-                jollyroger.abordaje();
-                if (jollyroger.partes.size() == MUNDO_ANCHO * MUNDO_ALTO) {
+                gallina.comer();
+                if (gallina.partes.size() == MUNDO_ANCHO * MUNDO_ALTO) {
                     finalJuego = true;
                     return;
                 } else {
-                    colocarBotin();
+                    colocarComida();
                 }
 
                 if (puntuacion % 100 == 0 && tick - TICK_DECREMENTO > 0) {

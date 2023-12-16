@@ -5,16 +5,14 @@ import com.ldm.ejemplojuegopiratas.Graficos;
 import com.ldm.ejemplojuegopiratas.Input.TouchEvent;
 import com.ldm.ejemplojuegopiratas.Pantalla;
 
-
-public class PantallaMaximasPuntuaciones extends Pantalla {
+public class Ranking extends Pantalla {
     String lineas[] = new String[5];
 
-    public PantallaMaximasPuntuaciones(Juego juego) {
+    public Ranking(Juego juego) {
         super(juego);
-
         for (int i = 0; i < 5; i++) {
-            String tiempoFormateado = String.format("%.2f", Configuraciones.tiempos[i]);
-            lineas[i] = "" + (i + 1) + ". " + Configuraciones.maxPuntuaciones[i] + " - " + tiempoFormateado + "s";
+            String tiempoFormateado = String.format("%.2f", Configuraciones.listaTiempos.get(i));
+            lineas[i] = "" + (i + 1) + ". " + Configuraciones.listaPuntuaciones.get(i) + " - " + tiempoFormateado + "s";
         }
     }
 
@@ -42,9 +40,10 @@ public class PantallaMaximasPuntuaciones extends Pantalla {
         Graficos g = juego.getGraphics();
 
         g.drawPixmap(Assets.fondo, 0, 0);
-        g.drawPixmap(Assets.menuprincipal, 64, 20, 0, 42, 196, 42);
+        g.drawPixmap(Assets.ranking, 88, 20);
+        g.drawPixmap(Assets.columnas, 0, 90);
 
-        int y = 100;
+        int y = 125;
         for (int i = 0; i < 5; i++) {
             dibujarTexto(g, lineas[i], 20, y);
             y += 50;

@@ -1,9 +1,9 @@
 package com.ldm.ejemplojuegopiratas.juego;
 
-public class Tripulacion {
+public class Pollitos {
     public int x, y;
 
-    public Tripulacion(int x, int y) {
+    public Pollitos(int x, int y) {
         this.x = x;
         this.y = y;
     }

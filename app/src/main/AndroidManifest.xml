@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <uses-sdk  android:targetSdkVersion="32"/>
 
     <application
@@ -12,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EjemploJuegoPiratas">
 
-        <activity android:name="JuegoPiratas"
+        <activity android:name=".JuegoLaGallina"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

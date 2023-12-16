@@ -20,7 +20,6 @@ public class AccelerometerHandler implements SensorEventListener {
             manager.registerListener(this, accelerometer,
                     SensorManager.SENSOR_DELAY_GAME);
         }
-
     }
 
     @Override

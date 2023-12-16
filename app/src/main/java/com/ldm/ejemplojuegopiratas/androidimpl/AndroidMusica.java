@@ -12,9 +12,6 @@ public class AndroidMusica implements Musica, OnCompletionListener {
     MediaPlayer mediaPlayer;
     boolean isPrepared = false;
 
-
-    private boolean estadoPausa = false;
-
     public AndroidMusica(AssetFileDescriptor assetDescriptor) {
         mediaPlayer = new MediaPlayer();
         try {
@@ -57,16 +54,11 @@ public class AndroidMusica implements Musica, OnCompletionListener {
     public void pause() {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            this.estadoPausa = true;
-
         }
     }
 
     @Override
     public void play() {
-
-
-        this.estadoPausa = false;
         if (mediaPlayer.isPlaying())
             return;
         try {

@@ -1,5 +1,6 @@
 package com.ldm.ejemplojuegopiratas.androidimpl;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -8,16 +9,15 @@ import android.graphics.Bitmap.Config;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.view.Window;
 import android.view.WindowManager;
 
+import com.ldm.ejemplojuegopiratas.juego.R;
 import com.ldm.ejemplojuegopiratas.Audio;
 import com.ldm.ejemplojuegopiratas.FileIO;
 import com.ldm.ejemplojuegopiratas.Juego;
 import com.ldm.ejemplojuegopiratas.Graficos;
 import com.ldm.ejemplojuegopiratas.Input;
 import com.ldm.ejemplojuegopiratas.Pantalla;
-import com.ldm.ejemplojuegopiratas.juego.R;
 
 public abstract class AndroidJuego extends Activity implements Juego {
     AndroidFastRenderView renderView;
@@ -28,6 +28,7 @@ public abstract class AndroidJuego extends Activity implements Juego {
     Pantalla pantalla;
     WakeLock wakeLock;
 
+    @SuppressLint("InvalidWakeLockTag")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

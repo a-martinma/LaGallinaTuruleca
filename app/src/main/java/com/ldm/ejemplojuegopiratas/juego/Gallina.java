@@ -3,20 +3,20 @@ package com.ldm.ejemplojuegopiratas.juego;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JollyRoger {
+public class Gallina {
     public static final int ARRIBA = 0;
     public static final int IZQUIERDA= 1;
     public static final int ABAJO = 2;
     public static final int DERECHA = 3;
 
-    public List<Tripulacion> partes = new ArrayList<Tripulacion>();
+    public List<Pollitos> partes = new ArrayList<Pollitos>();
     public int direccion;
 
-    public JollyRoger() {
+    public Gallina() {
         direccion = ARRIBA;
-        partes.add(new Tripulacion(5, 6));
-        partes.add(new Tripulacion(5, 7));
-        partes.add(new Tripulacion(5, 8));
+        partes.add(new Pollitos(5, 6));
+        partes.add(new Pollitos(5, 7));
+        partes.add(new Pollitos(5, 8));
     }
 
     public void girarIzquierda() {
@@ -31,51 +31,51 @@ public class JollyRoger {
             direccion = DERECHA;
     }
 
-    public void abordaje() {
-        Tripulacion end = partes.get(partes.size()-1);
-        partes.add(new Tripulacion(end.x, end.y));
+    public void comer() {
+        Pollitos end = partes.get(partes.size()-1);
+        partes.add(new Pollitos(end.x, end.y));
     }
 
     public void avance() {
-        Tripulacion barco = partes.get(0);
+        Pollitos pollito = partes.get(0);
 
         int len = partes.size() - 1;
         for(int i = len; i > 0; i--) {
-            Tripulacion antes = partes.get(i-1);
-            Tripulacion parte = partes.get(i);
+            Pollitos antes = partes.get(i-1);
+            Pollitos parte = partes.get(i);
             parte.x = antes.x;
             parte.y = antes.y;
         }
 
         if(direccion == ARRIBA)
-            barco.y -= 1;
+            pollito.y -= 1;
         if(direccion == IZQUIERDA)
-            barco.x -= 1;
+            pollito.x -= 1;
         if(direccion == ABAJO)
-            barco.y += 1;
+            pollito.y += 1;
         if(direccion == DERECHA)
-            barco.x += 1;
+            pollito.x += 1;
 
-        if(barco.x < 0)
-            barco.x = 9;
-        if(barco.x > 9)
-            barco.x = 0;
-        if(barco.y < 0)
-            barco.y = 12;
-        if(barco.y > 12)
-            barco.y = 0;
+        if(pollito.x < 0)
+            pollito.x = 9;
+        if(pollito.x > 9)
+            pollito.x = 0;
+        if(pollito.y < 0)
+            pollito.y = 12;
+        if(pollito.y > 12)
+            pollito.y = 0;
     }
 
     public boolean comprobarChoque() {
         int len = partes.size();
-        Tripulacion barco = partes.get(0);
+        Pollitos pollito = partes.get(0);
         for(int i = 1; i < len; i++) {
-            Tripulacion parte = partes.get(i);
-            if(parte.x == barco.x && parte.y == barco.y)
+            Pollitos parte = partes.get(i);
+            if(parte.x == pollito.x && parte.y == pollito.y)
                 return true;
         }
 
-        if ((barco.x == 3 && barco.y == 3) || (barco.x == 6 && barco.y == 9))
+        if ((pollito.x == 3 && pollito.y == 3) || (pollito.x == 6 && pollito.y == 9))
             return true;
 
         return false;

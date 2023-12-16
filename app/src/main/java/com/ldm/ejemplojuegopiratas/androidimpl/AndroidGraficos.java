@@ -16,7 +16,6 @@ import android.graphics.Rect;
 import com.ldm.ejemplojuegopiratas.Graficos;
 import com.ldm.ejemplojuegopiratas.Pixmap;
 
-
 public class AndroidGraficos implements Graficos {
     AssetManager assets;
     Bitmap frameBuffer;

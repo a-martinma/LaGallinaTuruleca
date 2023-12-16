@@ -13,8 +13,10 @@ public class MainMenuScreen extends Pantalla {
     @Override
     public void update(float deltaTime) {
         if(Configuraciones.sonidoHabilitado) {
-            if(!Assets.musicaMenu.isPlaying())
+            if(!Assets.musicaMenu.isPlaying()) {
                 Assets.musicaMenu.play();
+                Assets.musicaMenu.setLooping(true);
+            }
         }
         Graficos g = juego.getGraphics();
         List<TouchEvent> touchEvents = juego.getInput().getTouchEvents();
@@ -29,10 +31,8 @@ public class MainMenuScreen extends Pantalla {
 
                     if(Assets.musicaMenu.isPlaying())
                         Assets.musicaMenu.stop();
-
                     else
                         Assets.musicaMenu.play();
-
 
                     if(Configuraciones.sonidoHabilitado)
                         Assets.pulsar.play(1);
@@ -46,13 +46,13 @@ public class MainMenuScreen extends Pantalla {
                     return;
                 }
                 if(inBounds(event, 64, 220 + 42, 192, 42) ) {
-                    juego.setScreen(new PantallaMaximasPuntuaciones(juego));
+                    juego.setScreen(new Ranking(juego));
                     if(Configuraciones.sonidoHabilitado)
                         Assets.pulsar.play(1);
                     return;
                 }
                 if(inBounds(event, 64, 220 + 84, 192, 42) ) {
-                    juego.setScreen(new PantallaAyuda(juego));
+                    juego.setScreen(new PantallaAyuda1(juego));
                     if(Configuraciones.sonidoHabilitado)
                         Assets.pulsar.play(1);
                     return;
