@@ -13,6 +13,8 @@ public class Assets {
     public static Pixmap ayuda2;
     public static Pixmap ayuda3;
     public static Pixmap ayuda4;
+    public static Pixmap ayudaRankingBoton;
+    public static Pixmap ayudaRanking;
     public static Pixmap numeros;
     public static Pixmap letras;
     public static Pixmap muro;
@@ -33,6 +35,8 @@ public class Assets {
     public static Pixmap resumen1;
     public static Pixmap resumen2;
     public static Pixmap resumen3;
+    public static Pixmap resumen4;
+    public static Pixmap resumen5;
     public static Sonido pulsar;
     public static Sonido comer;
     public static Sonido derrota;

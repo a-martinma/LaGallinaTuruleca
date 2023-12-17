@@ -31,6 +31,12 @@ public class Ranking extends Pantalla {
                     juego.setScreen(new MainMenuScreen(juego));
                     return;
                 }
+                if(event.x > 250 && event.y > 416 ) {
+                    if(Configuraciones.sonidoHabilitado)
+                        Assets.pulsar.play(1);
+                    juego.setScreen(new PantallaAyudaRanking(juego));
+                    return;
+                }
             }
         }
     }
@@ -42,6 +48,7 @@ public class Ranking extends Pantalla {
         g.drawPixmap(Assets.fondo, 0, 0);
         g.drawPixmap(Assets.ranking, 88, 20);
         g.drawPixmap(Assets.columnas, 0, 90);
+        g.drawPixmap(Assets.ayudaRankingBoton, 250, 416, 0, 0, 64, 64);
 
         int y = 125;
         for (int i = 0; i < 5; i++) {

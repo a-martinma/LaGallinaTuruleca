@@ -86,14 +86,14 @@ public class Configuraciones {
 
     public static void ordenarRanking() {
 
-        LinkedList<PersonaInfo> listaInfo = new LinkedList<>();
+        LinkedList<InfoPartida> listaInfo = new LinkedList<>();
         for (int i = 0; i < listaPuntuaciones.size(); i++) {
-            listaInfo.add(new PersonaInfo(listaPuntuaciones.get(i), listaTiempos.get(i)));
+            listaInfo.add(new InfoPartida(listaPuntuaciones.get(i), listaTiempos.get(i)));
         }
 
-        Collections.sort(listaInfo, new Comparator<PersonaInfo>() {
+        Collections.sort(listaInfo, new Comparator<InfoPartida>() {
             @Override
-            public int compare(PersonaInfo persona1, PersonaInfo persona2) {
+            public int compare(InfoPartida persona1, InfoPartida persona2) {
                 // Ordenar por puntuación descendente
                 int comparacionPuntuacion = Integer.compare(persona2.getPuntuacion(), persona1.getPuntuacion());
                 if (comparacionPuntuacion != 0) {
@@ -105,18 +105,18 @@ public class Configuraciones {
             }
         });
 
-
+        //Se actualizan las listas quedando ordenadas
         for (int i = 0; i < listaInfo.size(); i++) {
             listaPuntuaciones.set(i, listaInfo.get(i).getPuntuacion());
             listaTiempos.set(i, listaInfo.get(i).getTiempo());
         }
     }
 
-    private static class PersonaInfo {
+    private static class InfoPartida {
         private int puntuacion;
         private float tiempo;
 
-        public PersonaInfo(int puntuacion, float tiempo) {
+        public InfoPartida(int puntuacion, float tiempo) {
             this.puntuacion = puntuacion;
             this.tiempo = tiempo;
         }
@@ -129,8 +129,5 @@ public class Configuraciones {
             return tiempo;
         }
     }
-
-
-
 
 }

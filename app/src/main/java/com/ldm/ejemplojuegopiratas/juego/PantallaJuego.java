@@ -3,7 +3,6 @@ package com.ldm.ejemplojuegopiratas.juego;
 import java.util.LinkedList;
 import java.util.List;
 import android.graphics.Color;
-import android.util.Pair;
 
 import com.ldm.ejemplojuegopiratas.Juego;
 import com.ldm.ejemplojuegopiratas.Graficos;
@@ -23,11 +22,10 @@ public class PantallaJuego extends Pantalla {
     Mundo mundo;
     int antiguaPuntuacion = 0;
     String puntuacion = "0";
-
     long tiempoInicio;
     long tiempoFinal;
     float tiempoTotal;
-    TimerAnimation timerAnimation;
+    Cronometro cronometro;
     LinkedList<Float> listaPausas = new LinkedList<>();
     long tiempoInicioPausa;
     long tiempoFinalPausa;
@@ -39,7 +37,8 @@ public class PantallaJuego extends Pantalla {
     public PantallaJuego(Juego juego) {
         super(juego);
         mundo = new Mundo();
-        this.timerAnimation = new TimerAnimation(juego.getGraphics().getWidth() / 2, juego.getGraphics().getWidth());
+        this.cronometro = new Cronometro();
+
     }
 
     @Override
@@ -172,15 +171,15 @@ public class PantallaJuego extends Pantalla {
             drawReadyUI();
         if(estado == EstadoJuego.Ejecutandose){
             drawRunningUI();
-            if(!this.vieneDePausa) {
-                timerAnimation.drawText(g, (System.currentTimeMillis() - tiempoInicio), 50);
-            }else {
-                float tiempoPausas = 0;
-                for(Float pausa : listaPausas)
-                    tiempoPausas +=pausa;
-                long act = (System.currentTimeMillis() - tiempoInicio - (long) tiempoPausas);
-                timerAnimation.drawText(g, act, 50);
-            }
+
+            //En este pequeño bloque se controla que se muestre bien el tiempo en el caso de que haya habido pausas
+            float tiempoPausas = 0;
+            for(Float pausa : listaPausas)
+                tiempoPausas += pausa;
+            long act = (System.currentTimeMillis() - tiempoInicio - (long) tiempoPausas);
+
+            //Se muestra el tiempo actual en el cronometro
+            cronometro.drawText(g, act);
         }
         if(estado == EstadoJuego.Pausado)
             drawPausedUI();
@@ -245,7 +244,7 @@ public class PantallaJuego extends Pantalla {
         g.drawPixmap(Assets.botones, 0, 416, 64, 64, 64, 64);
         g.drawPixmap(Assets.botones, 256, 416, 0, 64, 64, 64);
         g.drawPixmap(Assets.puntostiempogameplay, 0, 425);
-        drawText(g, puntuacion, g.getWidth() / 2 - puntuacion.length()*20 / 2, g.getHeight() - 42);
+        drawText(g, puntuacion, g.getWidth() / 2 - puntuacion.length()*20 / 2 + 12, g.getHeight() - 42);
     }
 
     private void drawPausedUI() {
@@ -266,16 +265,28 @@ public class PantallaJuego extends Pantalla {
         for(Float pausa : listaPausas)
             tiempoReal = tiempoReal - pausa/1000;
         String tiempoFormateado = String.format("%.2f", tiempoReal);
+
+        //Elección de assets a la hora de mostrar el resumen de la partida
         if(tiempoReal < 10.0f) {
             drawText(g, tiempoFormateado, 236, 447);
             g.drawPixmap(Assets.resumen1, 0, 420);
         }
         else if (tiempoReal > 10.0f && tiempoReal < 100.0f){
-            drawText(g, tiempoFormateado, 242, 447);
-            g.drawPixmap(Assets.resumen2, 0, 420);
+            if(Integer.parseInt(puntuacion)>=100){
+                drawText(g, tiempoFormateado, 242, 447);
+                g.drawPixmap(Assets.resumen2, 0, 420);
+            }else{
+                drawText(g, tiempoFormateado, 242, 447);
+                g.drawPixmap(Assets.resumen4, 0, 420);
+            }
         }else{
-            drawText(g, tiempoFormateado, 242, 447);
-            g.drawPixmap(Assets.resumen3, 0, 420);
+            if(Integer.parseInt(puntuacion)>=100) {
+                drawText(g, tiempoFormateado, 242, 447);
+                g.drawPixmap(Assets.resumen3, 0, 420);
+            }else{
+                drawText(g, tiempoFormateado, 242, 447);
+                g.drawPixmap(Assets.resumen5, 0, 420);
+            }
         }
     }
 

@@ -21,6 +21,8 @@ public class LoadingScreen extends Pantalla{
         Assets.ayuda2 = g.newPixmap("ayuda2.png", PixmapFormat.ARGB4444);
         Assets.ayuda3 = g.newPixmap("ayuda3.png", PixmapFormat.ARGB4444);
         Assets.ayuda4 = g.newPixmap("ayuda4.png", PixmapFormat.ARGB4444);
+        Assets.ayudaRankingBoton = g.newPixmap("ayudaRankingBoton.png", PixmapFormat.ARGB4444);
+        Assets.ayudaRanking = g.newPixmap("ayudaRanking.png", PixmapFormat.ARGB4444);
         Assets.numeros = g.newPixmap("numeros.png", PixmapFormat.ARGB4444);
         Assets.letras = g.newPixmap("letras.png", PixmapFormat.ARGB4444);
         Assets.muro = g.newPixmap("muro.png", PixmapFormat.ARGB4444);
@@ -41,6 +43,8 @@ public class LoadingScreen extends Pantalla{
         Assets.resumen1 = g.newPixmap("resumen1.png", PixmapFormat.ARGB4444);
         Assets.resumen2 = g.newPixmap("resumen2.png", PixmapFormat.ARGB4444);
         Assets.resumen3 = g.newPixmap("resumen3.png", PixmapFormat.ARGB4444);
+        Assets.resumen4 = g.newPixmap("resumen4.png", PixmapFormat.ARGB4444);
+        Assets.resumen5 = g.newPixmap("resumen5.png", PixmapFormat.ARGB4444);
         Assets.pulsar = juego.getAudio().nuevoSonido("pulsar.ogg");
         Assets.comer = juego.getAudio().nuevoSonido("ataque.ogg");
         Assets.derrota = juego.getAudio().nuevoSonido("derrota.ogg");
